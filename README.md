@@ -46,15 +46,15 @@ these three:
         + or adjacent squares
 
 ##Movement and engaging in Combat
-Movement works in the following way:
-1. Player 1 moves their characters at the character's move rate or 
+
+1. Each Player moves their respective characters at the character's move rate or 
 (counter attack if they are engaged in combat)
 
 2. If a character encounters another character, they may attack
 * Oppenents who have been attacked can then immdiately 
 counter attack
 
-3. Player 2 moves their characters at the character's move rate
+3. Player Two moves their characters at the character's move rate
 or (counter attack if they are engaged in combat)
 
 4. If combat has taken place, total available hitpoints are adjusted
@@ -65,7 +65,7 @@ to attack with, then click on the unit they wish to attack
 6. Damage is automatic
  
 ##Combat (and how it works)
-Combat works int eh following way:
+
 1. When a character moves into a square adjacent to an opponent, the
 two opposing characters engage in Combat
 
