@@ -46,41 +46,32 @@ these three:
         + or adjacent squares
 
 ##Movement and engaging in Combat
-    * Player 1 moves their characters at the character's move rate
+Movement works in the following way:
+    1. Player 1 moves their characters at the character's move rate or 
+    (counter attack if they are engaged in combat)
+    2. If a character encounters another character, they may attack
+        * Oppenents who have been attacked can then immdiately 
+        counter attack
+    3. Player 2 moves their characters at the character's move rate
     or (counter attack if they are engaged in combat)
-    
-    * If a character encounters another character, they may attack
-    
-    * Oppenents who have been attacked can counter attack
-    
-    * Player 2 moves their characters at the character's move rate
-    or (counter attack if they are engaged in combat)
-    
-    * If combat has taken place, total available hitpoints are adjusted
-    
-    * In order to attack, the player must first click on the unit they wish
+    4. If combat has taken place, total available hitpoints are adjusted
+    5. In order to attack, the player must first click on the unit they wish
     to attack with, then click on the unit they wish to attack
-    
-    * Damage is automatic
+    6. Damage is automatic
  
 ##Combat (and how it works)
-    * When a character moves into a square adjacent to an opponent, the
+Combat works int eh following way:
+    1. When a character moves into a square adjacent to an opponent, the
     two opposing characters engage in Combat
-    
-    * The player who's character's move action provokes a Combat gets to
+    2. The player who's character's move action provokes a Combat gets to
     attack first 
-    
-    * If there are multiple characters in adjacent spaces the 
+    3. If there are multiple characters in adjacent spaces the 
     moving/attacking character must pick only one opponent to engage in 
     combat with, unless that character has the ability to attack
     multiple targets during thier turn
-    
-    * Following, the character just attacked gets to deliver a return blow
-    
-    * If there are multiple characters in adjacent spaces each one gets to
+    4. Following, the character just attacked gets to deliver a return blow
+    5. If there are multiple characters in adjacent spaces each one gets to
     engage in one attack of opprotunity on the infiltrator
-    
-    * Hit points are decremented accordingly
-    
-    * Each individual attack only does one point of damage
+    6. Hit points are decremented accordingly
+    7. Each individual attack only does one point of damage
 
