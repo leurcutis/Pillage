@@ -61,3 +61,8 @@ table {
   padding: 25px;
   font-family: 'UnifrakturCook', cursive;
 }
+
+img {
+  height: 60px;
+  width: 70px;
+}
