@@ -1,5 +1,53 @@
-h1 {
+body {
+  background: black;
   text-align: center;
   font: bold;
-  color: black;
+  color: white;
+  font-family: 'UnifrakturCook', cursive;
+  font-size: 45px;
+}
+
+.board {
+  margin: 0 auto;
+
+}
+
+.startGameButton {
+  height: 35px;
+  width: 100px;
+  background: red;
+  border: 0px;
+  color: yellow;
+  font-family: 'UnifrakturCook', cursive;
+  font-size: 17px;
+}
+
+.resetGameButton {
+  height: 35px;
+  width: 100px;
+  background: grey;
+  border: 0px;
+  color: white;
+  font-family: 'UnifrakturCook', cursive;
+  font-size: 17px;
+}
+
+svg {}
+.hexfield {
+  fill: transparent;
+  stroke: white;
+  stroke-width: 1;
+}
+.hexfield:focus {
+  outline:none;
+}
+.hexfield:hover {
+  fill: grey;
+}
+.hexfield:active {
+  fill: red;
+  outline: none;
+}
+.hexfield.clicked{
+  fill: red;
 }

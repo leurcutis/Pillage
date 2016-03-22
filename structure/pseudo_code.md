@@ -31,6 +31,8 @@
 
 * The Characters
 
+<!-- put the characters into an array -->
+
 ##Actions
 
 * Character Movement
@@ -71,7 +73,7 @@ Object Constructor with defined attributes
 
 
 
-##Starting the Game
+## Starting the Game
 
 Click 'Start Game' button starts game
 * enables "turns" to take place
@@ -79,19 +81,22 @@ Click 'Start Game' button starts game
 
 ##Winning Conditions
 If a character hit points are < 1
+    remove character from play
     Check for winning conditions
 
 If only either Player One || Player Two is still in play
     game ends
+If characterOne.length = 0 || characterTwo.length = 0
+    game ends
     
-##Turns
+## Turns
 
 Turns have two parts: the Movement Phase and the Attack Phase. The
 Movement phase must be satisfied in order to begin the Attack Phase.
 When the Attack Phase is completed, the turn ends which initiates
 the next Player's turn.
 
-###Movement
+### Movement
 
 Default, **Player One** always gets first move. Each turn switches
 between Player One and Player Two.
@@ -104,18 +109,18 @@ between Player One and Player Two.
 }
 
 * Else if player clicks outside of move threshold {
-    + generate message ('That's too far, dummy!')
+    + generate message ('That's too far you! can only move' + X + 'spaces, dummy!')
 }
 
 * Else if friendly character occupies space {
-    + generate message ('hey! find your own space, dummy!') 
+    + generate message ('Hey! find your own space, dummy!') 
 }
     
 * Else if no move {
     + click again on selected character
 }
     
-###Attack
+### Attack
 
 The Attack phase takes place after fullfilling Movement phase
 
