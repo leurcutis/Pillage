@@ -1,5 +1,7 @@
 
 
+
+ //$('#container [hex-row=2][hex-column=3]').add('<img id="p1rw" src="http://i.imgur.com/kr285Wm.png" />');
 // Character builder object constructor
 // take a look at how to embed player 1 or player 2 meta data in
 // each of the characters for winning condition check
@@ -15,12 +17,12 @@
 // // when attacks take place
 
 var playerOne = {
-  name : 'Player One',
+  name : 'Player_One',
   characters : []
 };
 
 var playerTwo = {
-  name : 'Player Two',
+  name : 'Player_Two',
   characters : []
 };
 

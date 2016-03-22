@@ -5,73 +5,121 @@
   <link rel="stylesheet" type="text/css" href="css/main.css">
   <link href='https://fonts.googleapis.com/css?family=UnifrakturCook:700' rel='stylesheet' type='text/css'>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-  <script src="js/hexagons.js"></script>
   <script src="js/app.js"></script>
-
 </head>
 <body>
   <h1>Pillage!</h1>
-  <div class="row">
-    <div class="span6" style="text-align:center">
-      <div id="container"> </div>
-      <h4><small id="logger">click around the grid</small></h4>
-    </div>
-      <div hidden class="span6">
-      <form class="form-horizontal" onsubmit="return false;">
-        <div class="control-group">
-          <label class="control-label">Rows</label>
-          <div class="controls">
-            <input class="input" id="rows" placeholder="Rows" value="8"/>
-          </div>
-        </div>
-        <div class="control-group">
-          <label class="control-label">Columns</label>
-          <div class="controls">
-            <input class="input" id="columns" placeholder="Columns" value="15"/>
-          </div>
-        </div>
-        <div class="control-group">
-          <label class="control-label">Radius</label>
-          <div class="controls">
-            <input  class="input" id="radius" placeholder="Radius" value="40"/>
-          </div>
-        </div>
-        <div class="control-group">
-          <div class="controls">
-            <button class="btn" id="rebuild">Rebuild</button>
-          </div>
-        </div>
+  <table>
+    <tr>
+      <td id="Row 0, Column 0" class="space"></td>
+      <td id="Row 0, Column 1" class="space"></td>
+      <td id="Row 0, Column 2" class="space"></td>
+      <td id="Row 0, Column 3" class="space"></td>
+      <td id="Row 0, Column 4" class="space"></td>
+      <td id="Row 0, Column 5" class="space"></td>
+      <td id="Row 0, Column 6" class="space"></td>
+      <td id="Row 0, Column 7" class="space"></td>
+      <td id="Row 0, Column 8" class="space"></td>
+      <td id="Row 0, Column 9" class="space"></td>
+      <td id="Row 0, Column 10" class="space"></td>
+      <td id="Row 0, Column 11" class="space"></td>
+      <td id="Row 0, Column 12" class="space"></td>
+    </tr>
+    <tr>
+      <td id="Row 1, Column 0" class="space"></td>
+      <td id="Row 1, Column 1" class="space"></td>
+      <td id="Row 1, Column 2" class="space"></td>
+      <td id="Row 1, Column 3" class="space"></td>
+      <td id="Row 1, Column 4" class="space"></td>
+      <td id="Row 1, Column 5" class="space"></td>
+      <td id="Row 1, Column 6" class="space"></td>
+      <td id="Row 1, Column 7" class="space"></td>
+      <td id="Row 1, Column 8" class="space"></td>
+      <td id="Row 1, Column 9" class="space"></td>
+      <td id="Row 1, Column 10" class="space"></td>
+      <td id="Row 1, Column 11" class="space"></td>
+      <td id="Row 1, Column 12" class="space"></td>
+    </tr>
+    <tr>
+      <td id="Row 2, Column 0" class="space"></td>
+      <td id="Row 2, Column 1" class="space"></td>
+      <td id="Row 2, Column 2" class="space"></td>
+      <td id="Row 2, Column 3" class="space"></td>
+      <td id="Row 2, Column 4" class="space"></td>
+      <td id="Row 2, Column 5" class="space"></td>
+      <td id="Row 2, Column 6" class="space"></td>
+      <td id="Row 2, Column 7" class="space"></td>
+      <td id="Row 2, Column 8" class="space"></td>
+      <td id="Row 2, Column 9" class="space"></td>
+      <td id="Row 2, Column 10" class="space"></td>
+      <td id="Row 2, Column 11" class="space"></td>
+      <td id="Row 2, Column 12" class="space"></td>
+    </tr>
+    <tr>
+      <td id="Row 3, Column 0" class="space"></td>
+      <td id="Row 3, Column 1" class="space"></td>
+      <td id="Row 3, Column 2" class="space"></td>
+      <td id="Row 3, Column 3" class="space"></td>
+      <td id="Row 3, Column 4" class="space"></td>
+      <td id="Row 3, Column 5" class="space"></td>
+      <td id="Row 3, Column 6" class="space"></td>
+      <td id="Row 3, Column 7" class="space"></td>
+      <td id="Row 3, Column 8" class="space"></td>
+      <td id="Row 3, Column 9" class="space"></td>
+      <td id="Row 3, Column 10" class="space"></td>
+      <td id="Row 3, Column 11" class="space"></td>
+      <td id="Row 3, Column 12" class="space"></td>
+    </tr>
+    <tr>
+      <td id="Row 4, Column 0" class="space"></td>
+      <td id="Row 4, Column 1" class="space"></td>
+      <td id="Row 4, Column 2" class="space"></td>
+      <td id="Row 4, Column 3" class="space"></td>
+      <td id="Row 4, Column 4" class="space"></td>
+      <td id="Row 4, Column 5" class="space"></td>
+      <td id="Row 4, Column 6" class="space"></td>
+      <td id="Row 4, Column 7" class="space"></td>
+      <td id="Row 4, Column 8" class="space"></td>
+      <td id="Row 4, Column 9" class="space"></td>
+      <td id="Row 4, Column 10" class="space"></td>
+      <td id="Row 4, Column 11" class="space"></td>
+      <td id="Row 4, Column 12" class="space"></td>
+    </tr>
+    <tr>
+      <td id="Row 5, Column 0" class="space"></td>
+      <td id="Row 5, Column 1" class="space"></td>
+      <td id="Row 5, Column 2" class="space"></td>
+      <td id="Row 5, Column 3" class="space"></td>
+      <td id="Row 5, Column 4" class="space"></td>
+      <td id="Row 5, Column 5" class="space"></td>
+      <td id="Row 5, Column 6" class="space"></td>
+      <td id="Row 5, Column 7" class="space"></td>
+      <td id="Row 5, Column 8" class="space"></td>
+      <td id="Row 5, Column 9" class="space"></td>
+      <td id="Row 5, Column 10" class="space"></td>
+      <td id="Row 5, Column 11" class="space"></td>
+      <td id="Row 5, Column 12" class="space"></td>
+    </tr>
+    <tr>
+      <td id="Row 6, Column 0" class="space"></td>
+      <td id="Row 6, Column 1" class="space"></td>
+      <td id="Row 6, Column 2" class="space"></td>
+      <td id="Row 6, Column 3" class="space"></td>
+      <td id="Row 6, Column 4" class="space"></td>
+      <td id="Row 6, Column 5" class="space"></td>
+      <td id="Row 6, Column 6" class="space"></td>
+      <td id="Row 6, Column 7" class="space"></td>
+      <td id="Row 6, Column 8" class="space"></td>
+      <td id="Row 6, Column 9" class="space"></td>
+      <td id="Row 6, Column 10" class="space"></td>
+      <td id="Row 6, Column 11" class="space"></td>
+      <td id="Row 6, Column 12" class="space"></td>
+    </tr>
 
-    </form>
-    </div>
-    <hr/>
+  </table>
+  <div class="buttons">
+    <button class="startGameButton">Pillage!</button>
+    <button class="resetGameButton">Reset</button>
   </div>
-
-
-<div class="row">
-    <div class="span6">
-
-
-<button id=startGame class='startGameButton'>Pillage!</button>
-<button id=resetGame class='resetGameButton'>Reset Game</button>
-
-<script>
-var rebuild = function () {
-  var
-    radius = parseInt($('#radius').val()),
-    columns = parseInt($('#columns').val()),
-    rows = parseInt($('#rows').val()),
-    cssClass = 'hexfield';
-  $('#container').empty().hexGridWidget(radius, columns, rows, cssClass).on('hexclick', function (e) {
-     $('#logger').text('clicked [' + e.column + ',' + e.row + '] hex with center at [' + e.center.x + ',' + e.center.y + '] px');
-  });
-  $('#container .hexfield').click(function () {
-    this.classList.toggle('clicked');
-  });
-};
-$('#rebuild').click(rebuild);
-rebuild();
-</script>
-
 </body>
 </html>

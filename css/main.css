@@ -1,53 +1,63 @@
-body {
-  background: black;
-  text-align: center;
-  font: bold;
-  color: white;
-  font-family: 'UnifrakturCook', cursive;
-  font-size: 45px;
+h1 {
+  font-size: 60px;
+  padding: 0px;
+  margin: 5px;
 }
 
-.board {
-  margin: 0 auto;
 
+body {
+  background: black;
+  color: white;
+  margin: 0 auto;
+  text-align: center;
+  font-family: 'UnifrakturCook', cursive;
+}
+
+tr {
+  background: white;
+  border-width: 3px;
+  border-color: white;
+  width: 100%;
+  margin: 0 auto;
+}
+
+td {
+  height: 75px;
+  width: 75px;
+  border-radius: 20px;
+  margin: 0 auto;
+}
+
+.space:hover {
+  background: grey;
+}
+
+table {
+  margin: 0 auto;
 }
 
 .startGameButton {
-  height: 35px;
+  height: 32px;
   width: 100px;
-  background: red;
   border: 0px;
+  background: red;
   color: yellow;
   font-family: 'UnifrakturCook', cursive;
-  font-size: 17px;
+  font-size: 18px;
 }
 
 .resetGameButton {
-  height: 35px;
+  height: 32px;
   width: 100px;
-  background: grey;
   border: 0px;
+  background: grey;
   color: white;
   font-family: 'UnifrakturCook', cursive;
-  font-size: 17px;
+  font-size: 18px;
 }
 
-svg {}
-.hexfield {
-  fill: transparent;
-  stroke: white;
-  stroke-width: 1;
-}
-.hexfield:focus {
-  outline:none;
-}
-.hexfield:hover {
-  fill: grey;
-}
-.hexfield:active {
-  fill: red;
-  outline: none;
-}
-.hexfield.clicked{
-  fill: red;
+.buttons {
+  margin: 0 auto;
+  padding: 25px;
+  font-family: 'UnifrakturCook', cursive;
 }
