@@ -12,7 +12,7 @@
    characters : [
       pOneWizard = {
         name : 'Player One Wizard',
-        img : '<img src=\'http://i.imgur.com/kr285Wm.png\'>',
+        img : '<img id="pOneWizard" src=\'http://i.imgur.com/kr285Wm.png\'>',
         moveRate : 2,
         attackProximity : 3,
         attackDamage : 1,
@@ -20,7 +20,7 @@
       },
       pOneAssassin = {
         name : 'Player One Assassin',
-        img : '<img src=\'http://i.imgur.com/Lm5TnEF.png\'>',
+        img : '<img id="pOneAssassin" src=\'http://i.imgur.com/Lm5TnEF.png\'>',
         moveRate : 3,
         attackProximity : 1,
         attackDamage : 1,
@@ -28,7 +28,7 @@
       },
       pOneJuggernaut = {
         name : 'Player One Juggernaut',
-        img : '<img src=\'http://i.imgur.com/vGUprxO.png>\'>',
+        img : '<img id="pOneJuggernaut" src=\'http://i.imgur.com/vGUprxO.png>\'>',
         moveRate : 1,
         attackProximity : 1,
         attackDamage : 2,
@@ -42,7 +42,7 @@
    characters : [
       pTwoWizard = {
         name : 'Player Two Wizard',
-        img : '<img src=\'http://i.imgur.com/KFSlZsV.png\'>',
+        img : '<img id="pTwoWizard" src=\'http://i.imgur.com/KFSlZsV.png\'>',
         moveRate : 2,
         attackProximity : 3,
         attackDamage : 1,
@@ -50,7 +50,7 @@
       },
       pTwoAssassin = {
         name : 'Player Two Assassin',
-        img : '<img src=\'http://i.imgur.com/80LqFIt.png\'>',
+        img : '<img id="pTwoAssasin" src=\'http://i.imgur.com/80LqFIt.png\'>',
         moveRate : 3,
         attackProximity : 1,
         attackDamage : 1,
@@ -58,7 +58,7 @@
       },
       pTwoJuggernaut = {
         name : 'Player Two Juggernaut',
-        img : '<img src=\'http://i.imgur.com/gbcDNuD.png\'>',
+        img : '<img id="pTwoJuggernaut" src=\'http://i.imgur.com/gbcDNuD.png\'>',
         moveRate : 1,
         attackProximity : 1,
         attackDamage : 2,
@@ -66,6 +66,9 @@
       }
     ]
  };
+
+ //reaching into each player object and defining the character's
+ // images to use as variables
 
  var p1Wizard = playerOne.characters[0].img;
  var p1Assassin = playerOne.characters[1].img;
@@ -75,29 +78,91 @@
  var p2Assassin = playerTwo.characters[1].img;
  var p2Juggernaut = playerTwo.characters[2].img;
 
+ // var allCharacters =
 
- var $RedWizard = playerOne.characters[0].img;
+ //hard coded the starting places of each of the characters
+ //It also initializes the game
+
+function initializeGame(){
+  $('#Row2-Column0').append(p1Wizard);
+  $('#Row3-Column1').append(p1Juggernaut);
+  $('#Row4-Column0').append(p1Assassin);
+
+  $('#Row2-Column12').append(p2Wizard);
+  $('#Row3-Column11').append(p2Juggernaut);
+  $('#Row4-Column12').append(p2Assassin);
+}
+initializeGame();
+
+//This logs the clicks on the td's in the console and gives
+//the coordinates
+
 $('td').on('click', function(){
   console.log(this.id + ' has been clicked');
 });
 
-// var $pOneWizardImage = $('<img>');
-// $pOneWizardImage.attr('src', $RedWizard);
-// console.log($pOneWizardImage);
+//the begining move logic below
+
+// click on character i want to move,
+// which selects the character
+// then click on the space
+// I want the character to move too
+
+// original space removes the character image
+// from the space moved away from
+// and adds it to the new space
+
+// var board = [
+// [null, null, null, null, null, null, null, null, null, null, null, null],
+// [null, null, null, null, null, null, null, null, null, null, null, null],
+// [null, null, null, null, null, null, null, null, null, null, null, null],
+// [null, null, null, null, null, null, null, null, null, null, null, null],
+// [null, null, null, null, null, null, null, null, null, null, null, null],
+// [null, null, null, null, null, null, null, null, null, null, null, null],
+// [null, null, null, null, null, null, null, null, null, null, null, null],
+// ]
+
+// for(i = 0, i < something; i++) {
+//   for(j = 0, j < something; i++)
+// }
 
 
+// when I click on any space
+// if that space has children = 1
+// then log 'boom'
 
-$('#Row2-Column0').append(p1Wizard);
-$('#Row3-Column1').append(p1Juggernaut);
-$('#Row4-Column0').append(p1Assassin);
+// record the thing we clicked (which piece) <- push it into an array
+// the next thing we click must be an open space
+// if it's open, append the thing we clicked before (which we get from the array), to what we just clicked.
+var move = [];
 
-$('#Row2-Column12').append(p2Wizard);
-$('#Row3-Column11').append(p2Juggernaut);
-$('#Row4-Column12').append(p2Assassin);
+$('.space').click(function(){
+  if($(this).children().length === 1) {
+    console.log("Boom!");
+    move.push($(this).children());
+    }
+});
 
-var playerMove = function() {
+$('.space').click(function(){
+  if($(this).children().length === 0) {
+    $(this).append(move[0]);
+    move = [];
+  }
+});
 
-}
+
+// var origSpace = null
+// $('characters').on('click', function()) {
+//   if (origSpace) === null && (".space" !== ''); {
+//         origSpace = (this);
+//   } else (this).appendTo('.space');
+//   origSpace.removeClass;
+//   (this).addClass;
+
+
+// var playerMove = function() {
+
+// }
 
 
 
@@ -110,11 +175,11 @@ var playerMove = function() {
 //   this.characterHitPoints = hitPoints;
 // };
 
-// // Characters generated by above Character constructor
-// // after each one is generated, they are pushed into the playerOne and playerTwo object arrays
-// // when a character is killed by 'hitPoints < 1' then they are removed from the array
-// // when an array is emptied during play, then game is over
-// // player with an array that still contains character objects wins the game
+//  Characters generated by above Character constructor
+//  after each one is generated, they are pushed into the playerOne and playerTwo object arrays
+//  when a character is killed by 'hitPoints < 1' then they are removed from the array
+//  when an array is emptied during play, then game is over
+//  player with an array that still contains character objects wins the game
 
 // var pOneAssassin = new Character(3, 1, 1, 5);
 // playerOne.characters.push(pOneAssassin);
@@ -129,29 +194,25 @@ var playerMove = function() {
 
 // var move = function(character) {
 
-//     // character moves
-//     // check for attack opportunity within threshold
-//     // if yes, then call attack function here
+// character moves
+// check for attack opportunity within threshold
+// if yes, then call attack function here
 
 // };
 
 
 // var attack = function {
-//   // if opponent is in range
-//   //   then attack
-//   //
+//    if opponent is in range
+//      then attack
+//
 // }
-// // // Player prototypes
+//  Player prototypes
 
-// // Character.prototype.player
-
-
-// // Move logic
+//  Character.prototype.player
 
 
-// // Attack logic
+//  Move logic
 
 
+//  Attack logic
 
-// characters = (characters.indexOf('wizard')
-//   return index
