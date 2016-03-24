@@ -1,8 +1,4 @@
 
-
-
-
-
 // player one and player two objects below
 // both have 'characters' arrays that are populated with characters when game starts
 // when attacks take place
@@ -17,7 +13,8 @@
         attackRadius : 3,
         attackDamage : 1,
         hitPoints : 7,
-        objectId : '0p1'
+        objectId : '0p1',
+        alignment : 'playerOne'
       },
       pOneAssassin = {
         name : 'Player One Assassin',
@@ -26,7 +23,8 @@
         attackRadius : 1,
         attackDamage : 1,
         hitPoints : 5,
-        objectId : '1p1'
+        objectId : '1p1',
+        alignment : 'playerOne'
 
       },
       pOneJuggernaut = {
@@ -36,7 +34,9 @@
         attackRadius : 1,
         attackDamage : 2,
         hitPoints : 9,
-        objectId : '2p1'
+        objectId : '2p1',
+        alignment : 'playerOne'
+
       }
     ]
  };
@@ -78,7 +78,6 @@
 
 
 
-
  //reaching into each player object and defining the character's
  // images to use as variables
 
@@ -98,12 +97,22 @@
 function initializeGame(){
 
   $('#Row2-Column0').append(p1Wizard);
+  $('#Row2-Column0').data(playerOne.characters[0]);
+
   $('#Row3-Column1').append(p1Juggernaut);
+  $('#Row3-Column1').data(playerOne.characters[2]);
+
   $('#Row4-Column0').append(p1Assassin);
+  $('#Row4-Column0').data(playerOne.characters[1]);
 
   $('#Row2-Column12').append(p2Wizard);
+  $('#Row2-Column12').data(playerTwo.characters[0]);
+
   $('#Row3-Column11').append(p2Juggernaut);
+  $('#Row3-Column11').data(playerTwo.characters[2]);
+
   $('#Row4-Column12').append(p2Assassin);
+  $('#Row4-Column12').data(playerTwo.characters[1]);
 }
 initializeGame();
 
@@ -125,21 +134,6 @@ $('td').on('click', function(){
 // from the space moved away from
 // and adds it to the new space
 
-// var board = [
-// [null, null, null, null, null, null, null, null, null, null, null, null],
-// [null, null, null, null, null, null, null, null, null, null, null, null],
-// [null, null, null, null, null, null, null, null, null, null, null, null],
-// [null, null, null, null, null, null, null, null, null, null, null, null],
-// [null, null, null, null, null, null, null, null, null, null, null, null],
-// [null, null, null, null, null, null, null, null, null, null, null, null],
-// [null, null, null, null, null, null, null, null, null, null, null, null],
-// ]
-
-// for(i = 0, i < something; i++) {
-//   for(j = 0, j < something; i++)
-// }
-
-
 // when I click on any space
 // if that space has children = 1
 // then log 'boom'
@@ -149,47 +143,14 @@ $('td').on('click', function(){
 // if it's open, append the thing we clicked before (which we get from the array), to what we just clicked.
 
 
-//create variables for hitPoints, moveRate, attackRadius that reach into each character object
-// var p1WizardHitPoints = playerOne.characters[0].hitPoints;
-// var p1WizardMoveRadius = playerOne.characters[0].moveRadius;
-// var p1WizardAttackDamage = playerOne.characters[0].attackDamage;
-// var p1WizardAttackRadius = playerOne.characters[0].attackRadius;
-
-// var p1AssassinHitPoints = playerOne.characters[1].hitPoints;
-// var p1AssassinMoveRadius = playerOne.characters[1].moveRadius;
-// var p1AssassinAttackDamage = playerOne.characters[1].attackDamage;
-// var p1AssassinAttackRadius = playerOne.characters[1].attackRadius;
-
-// var p1JuggernautHitPoints = playerOne.characters[2].hitPoints;
-// var p1JuggernautMoveRadius = playerOne.characters[2].moveRadius;
-// var p1JuggernautAttackDamage = playerOne.characters[2].attackDamage;
-// var p1JuggernautAttackRadius = playerOne.characters[2].attackRadius;
-
-
-
-// var p2WizardHitPoints = playerTwo.characters[0].hitPoints;
-// var p2WizardMoveRadius = playerTwo.characters[0].moveRadius;
-// var p2WizardAttackDamage = playerTwo.characters[0].attackDamage;
-// var p2WizardAttackRadius = playerTwo.characters[0].attackRadius;
-
-// var p2AssassinHitPoints = playerTwo.characters[1].hitPoints;
-// var p2AssassinMoveRadius = playerTwo.characters[1].moveRadius;
-// var p2AssassinAttackDamage = playerTwo.characters[1].attackDamage;
-// var p2AssassinAttackRadius = playerTwo.characters[1].attackRadius;
-
-// var p2JuggernautHitPoints = playerTwo.characters[2].hitPoints;
-// var p2JuggernautMoveRadius = playerTwo.characters[2].moveRadius;
-// var p2JuggernautAttackDamage = playerTwo.characters[2].attackDamage;
-// var p2JuggernautAttackRadius = playerTwo.characters[2].attackRadius;
-
-
-
+var distance = [];
 var tempMove = [];
 // gets the coordinates of specific .space click
 var currentCoord = [];
 var destCoord = [];
+var tempObject;
 
-var getMove;
+var selected = false;
 
 var getCoord = function(str) {
   var tempRow = parseInt(str[3]);
@@ -200,28 +161,35 @@ var getCoord = function(str) {
   var getDist = function(coord1, coord2) {
   return Math.floor(Math.sqrt(Math.pow(coord1[0] - coord2[0], 2) + Math.pow(coord1[1] - coord2[1], 2)));
 };
+  var moveRadius;
 
 $('.space').click(function(){
 
-  if($(this).children().length === 1) {
+  if($(this).children().length === 1 && !selected)  {
+    selected = true;
     tempMove.push($(this).children());
     currentCoord = getCoord($(this).attr('id'));
+    tempObject = $(this);
+    moveRadius = tempObject.data().moveRadius;
   }
 
   if($(this).children().length === 0) { // reach into the clicked td and look for an object $(this).children()
     destCoord = getCoord($(this).attr('id'));
     var tempDist = getDist(currentCoord, destCoord);
-    console.log(tempDist);
+    if (moveRadius >= tempDist) {
+    distance.push(tempDist);
+    selected = false;
     $(this).append(tempMove[0]);
+    $(this).data(tempObject.data());
+    $(tempObject).removeData();
+    //$(this).data()
     tempMove = [];
+    } else {
+        alert("That's too far to move, DUMMY!");
+    }
   }
 });
 
-// if (getMove <= 4)  {
-//   return true;
-// } else {
-//   return false;
-// }
 
 //when clicking square with a character in it, determine what player it is
 //then determine what character it is
