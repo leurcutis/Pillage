@@ -13,26 +13,30 @@
       pOneWizard = {
         name : 'Player One Wizard',
         img : '<img id="pOneWizard" src=\'http://i.imgur.com/kr285Wm.png\'>',
-        moveRate : 2,
-        attackProximity : 3,
+        moveRadius : 2,
+        attackRadius : 3,
         attackDamage : 1,
-        hitPoints : 7
+        hitPoints : 7,
+        objectId : '0p1'
       },
       pOneAssassin = {
         name : 'Player One Assassin',
         img : '<img id="pOneAssassin" src=\'http://i.imgur.com/Lm5TnEF.png\'>',
-        moveRate : 3,
-        attackProximity : 1,
+        moveRadius : 3,
+        attackRadius : 1,
         attackDamage : 1,
-        hitPoints : 5
+        hitPoints : 5,
+        objectId : '1p1'
+
       },
       pOneJuggernaut = {
         name : 'Player One Juggernaut',
         img : '<img id="pOneJuggernaut" src=\'http://i.imgur.com/vGUprxO.png>\'>',
-        moveRate : 1,
-        attackProximity : 1,
+        moveRadius : 1,
+        attackRadius : 1,
         attackDamage : 2,
-        hitPoints : 9
+        hitPoints : 9,
+        objectId : '2p1'
       }
     ]
  };
@@ -43,29 +47,37 @@
       pTwoWizard = {
         name : 'Player Two Wizard',
         img : '<img id="pTwoWizard" src=\'http://i.imgur.com/KFSlZsV.png\'>',
-        moveRate : 2,
-        attackProximity : 3,
+        moveRadius : 2,
+        attackRadius : 3,
         attackDamage : 1,
-        hitPoints : 7
+        hitPoints : 7,
+        objectId : '0p2'
       },
       pTwoAssassin = {
         name : 'Player Two Assassin',
         img : '<img id="pTwoAssasin" src=\'http://i.imgur.com/80LqFIt.png\'>',
-        moveRate : 3,
-        attackProximity : 1,
+        moveRadius : 3,
+        attackRadius : 1,
         attackDamage : 1,
-        hitPoints : 5
+        hitPoints : 5,
+        objectId : '1p2'
       },
       pTwoJuggernaut = {
         name : 'Player Two Juggernaut',
         img : '<img id="pTwoJuggernaut" src=\'http://i.imgur.com/gbcDNuD.png\'>',
-        moveRate : 1,
-        attackProximity : 1,
+        moveRadius : 1,
+        attackRadius : 1,
         attackDamage : 2,
-        hitPoints : 9
+        hitPoints : 9,
+        objectId : '2p2'
       }
     ]
  };
+
+
+
+
+
 
  //reaching into each player object and defining the character's
  // images to use as variables
@@ -84,6 +96,7 @@
  //It also initializes the game
 
 function initializeGame(){
+
   $('#Row2-Column0').append(p1Wizard);
   $('#Row3-Column1').append(p1Juggernaut);
   $('#Row4-Column0').append(p1Assassin);
@@ -134,21 +147,118 @@ $('td').on('click', function(){
 // record the thing we clicked (which piece) <- push it into an array
 // the next thing we click must be an open space
 // if it's open, append the thing we clicked before (which we get from the array), to what we just clicked.
-var move = [];
+
+
+//create variables for hitPoints, moveRate, attackRadius that reach into each character object
+// var p1WizardHitPoints = playerOne.characters[0].hitPoints;
+// var p1WizardMoveRadius = playerOne.characters[0].moveRadius;
+// var p1WizardAttackDamage = playerOne.characters[0].attackDamage;
+// var p1WizardAttackRadius = playerOne.characters[0].attackRadius;
+
+// var p1AssassinHitPoints = playerOne.characters[1].hitPoints;
+// var p1AssassinMoveRadius = playerOne.characters[1].moveRadius;
+// var p1AssassinAttackDamage = playerOne.characters[1].attackDamage;
+// var p1AssassinAttackRadius = playerOne.characters[1].attackRadius;
+
+// var p1JuggernautHitPoints = playerOne.characters[2].hitPoints;
+// var p1JuggernautMoveRadius = playerOne.characters[2].moveRadius;
+// var p1JuggernautAttackDamage = playerOne.characters[2].attackDamage;
+// var p1JuggernautAttackRadius = playerOne.characters[2].attackRadius;
+
+
+
+// var p2WizardHitPoints = playerTwo.characters[0].hitPoints;
+// var p2WizardMoveRadius = playerTwo.characters[0].moveRadius;
+// var p2WizardAttackDamage = playerTwo.characters[0].attackDamage;
+// var p2WizardAttackRadius = playerTwo.characters[0].attackRadius;
+
+// var p2AssassinHitPoints = playerTwo.characters[1].hitPoints;
+// var p2AssassinMoveRadius = playerTwo.characters[1].moveRadius;
+// var p2AssassinAttackDamage = playerTwo.characters[1].attackDamage;
+// var p2AssassinAttackRadius = playerTwo.characters[1].attackRadius;
+
+// var p2JuggernautHitPoints = playerTwo.characters[2].hitPoints;
+// var p2JuggernautMoveRadius = playerTwo.characters[2].moveRadius;
+// var p2JuggernautAttackDamage = playerTwo.characters[2].attackDamage;
+// var p2JuggernautAttackRadius = playerTwo.characters[2].attackRadius;
+
+
+
+var tempMove = [];
+// gets the coordinates of specific .space click
+var currentCoord = [];
+var destCoord = [];
+
+var getMove;
+
+var getCoord = function(str) {
+  var tempRow = parseInt(str[3]);
+  var tempCol = parseInt(str[11] + str[12]);
+  return [tempRow, tempCol];
+};
+
+  var getDist = function(coord1, coord2) {
+  return Math.floor(Math.sqrt(Math.pow(coord1[0] - coord2[0], 2) + Math.pow(coord1[1] - coord2[1], 2)));
+};
 
 $('.space').click(function(){
+
   if($(this).children().length === 1) {
-    console.log("Boom!");
-    move.push($(this).children());
-    }
-});
+    tempMove.push($(this).children());
+    currentCoord = getCoord($(this).attr('id'));
+  }
 
-$('.space').click(function(){
-  if($(this).children().length === 0) {
-    $(this).append(move[0]);
-    move = [];
+  if($(this).children().length === 0) { // reach into the clicked td and look for an object $(this).children()
+    destCoord = getCoord($(this).attr('id'));
+    var tempDist = getDist(currentCoord, destCoord);
+    console.log(tempDist);
+    $(this).append(tempMove[0]);
+    tempMove = [];
   }
 });
+
+// if (getMove <= 4)  {
+//   return true;
+// } else {
+//   return false;
+// }
+
+//when clicking square with a character in it, determine what player it is
+//then determine what character it is
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// $('.space').click(function(){
+
+//   if($(this).children().length === 0) {
+//     destCoord = getCoord($(this).attr('id'));
+//     var tempDist = getDist(currentCoord, destCoord);
+//     console.log(tempDist);
+//     $(this).append(move[0]);
+//     move = [];
+//   }
+// });
+
 
 
 // var origSpace = null

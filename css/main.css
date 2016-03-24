@@ -4,6 +4,9 @@ h1 {
   margin: 5px;
 }
 
+* {
+  box-sizing: border-box;
+}
 
 body {
   background: black;
@@ -11,6 +14,7 @@ body {
   margin: 0 auto;
   text-align: center;
   font-family: 'UnifrakturCook', cursive;
+
 }
 
 tr {
@@ -26,6 +30,7 @@ td {
   width: 75px;
   border-radius: 20px;
   margin: 0 auto;
+
 }
 
 .space:hover {
@@ -63,6 +68,6 @@ table {
 }
 
 img {
-  height: 60px;
-  width: 70px;
+  height: 50px;
+  width: 60px;
 }
