@@ -136,6 +136,7 @@ var tempMove = [];      // for temporarily storing what is being moved after ini
 var currentCoord = [];  // for storing the coordinates for the initial space where the character is selected and moved out of
 var destCoord = [];     // for storing the coordinates for the target space the character is moving into
 var tempObject;         // refers to the object that is currently occupying the space clicked
+var targetObject;
 var selected = false;
 
 
@@ -153,7 +154,7 @@ var getDist = function(coord1, coord2) {
   return Math.floor(Math.sqrt(Math.pow(coord1[0] - coord2[0], 2) + Math.pow(coord1[1] - coord2[1], 2)));
 };
 
-var turnCounter = 0
+var turnCounter = 0;
 
 var moveRadius;
 var attackRadius;
@@ -175,6 +176,10 @@ var turn = function() {
 
 $('.space').click(function(){
 
+  console.log(tempObject);
+  console.log(targetObject);
+
+
   if($(this).children().length === 1 && !selected)  { //...check clicked space to see if it is empty && if it is not 'selected'
     selected = true;                                  //...if not selected, select it
     tempMove.push($(this).children());                //...put what is in space into tempMove array (above)
@@ -192,22 +197,39 @@ $('.space').click(function(){
       selected = false;                               //...
       $(this).append(tempMove[0]);                    //...
       $(this).data(tempObject.data());                //...
-
                                                       //.
       tempMove = [];
+
     } else {
         alert("This character can't move that far!");
         return false;
     }
-    turn();
-    console.log(turn());
+    // turn();
+    // console.log(turn());
 
     //attackRadius = tempObject.data().attackRadius
 
+  } else {
+
+      checkAttack();
+
   }
+
 });
 
+var checkAttack = function() {
+  if(targetObject&&tempObject){
+    if(tempObject.data().alignment!=targetObject.data().alignment){
+      console.log("Attack!");
+      $('body').append(tempMove[0]);
+      tempMove = [];
+       selected = false;
+    }
+  }
+};
+
 $('.space').on('click', function(){
+  targetObject = $(this);
   console.log(this.id + ' has been clicked');
 });
 
@@ -220,13 +242,13 @@ var checkOccupiedSpaces = function() {
   for(i = 0;i < occupiedSpace.length; i++) {
     console.log($(tempObject).data().alignment);
     var myPlayer = $(tempObject).data().alignment;
-    console.log('my player is', myPlayer);
-    var theirPlayer = $(occupiedSpace[i]).data().alignment;
-    console.log('their player is', theirPlayer);
+    console.log('My player is', myPlayer);
+    var enemyPlayer = $(occupiedSpace[i]).data().alignment;
+    console.log('Enemy player is', theirPlayer);
     if (myPlayer === theirPlayer) {
       console.log('Friendly space!');
     } else {
-      console.log('Opponent space!');
+      console.log('Enemy space!');
     }
   }
 };
