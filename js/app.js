@@ -129,6 +129,12 @@ $('.startGameButton').on('click', function() {
 
 });
 
+// Console logs the id, which simply displays coordinates
+$('.space').on('click', function(){
+  targetObject = $(this);
+  console.log(this.id + ' has been clicked');
+});
+
 
 // The begining move logic below
 
@@ -154,8 +160,7 @@ var getDist = function(coord1, coord2) {
   return Math.floor(Math.sqrt(Math.pow(coord1[0] - coord2[0], 2) + Math.pow(coord1[1] - coord2[1], 2)));
 };
 
-var turnCounter = 0;
-
+//character variables
 var moveRadius;
 var attackRadius;
 var hitPoints;
@@ -165,20 +170,36 @@ var alignment;
 var occupiedSpace = [];
 var attackableSpace = [];
 
-var turn = function() {
-  turnCounter++;
-  return turnCounter;
-};
 
+//Separates the enemy players
+var checkOccupiedSpaces = function() {
+  $('.space').each( function() {
+    if ($(this).children().length >= 1) {
+      occupiedSpace.push(this);
+    }
+  });
+  for(i = 0;i < occupiedSpace.length; i++) {
+    console.log($(tempObject).data().alignment);
+
+    var myPlayer = $(tempObject).data().alignment;
+    console.log('My player is', myPlayer);
+
+    var enemyPlayer = $(occupiedSpace[i]).data().alignment;
+    console.log('Enemy player is', enemyPlayer);
+
+    if (myPlayer === enemyPlayer) {
+      console.log('Friendly space!');
+
+    } else {
+      console.log('Enemy space!');
+    }
+  }
+};
 
 
 //when a space on the board is selected...
 
-$('.space').click(function(){
-
-  console.log(tempObject);
-  console.log(targetObject);
-
+$('.space').click(function() {
 
   if($(this).children().length === 1 && !selected)  { //...check clicked space to see if it is empty && if it is not 'selected'
     selected = true;                                  //...if not selected, select it
@@ -197,93 +218,16 @@ $('.space').click(function(){
       selected = false;                               //...
       $(this).append(tempMove[0]);                    //...
       $(this).data(tempObject.data());                //...
-                                                      //.
+      $(tempObject).removeData();
+
       tempMove = [];
 
     } else {
         alert("This character can't move that far!");
         return false;
+
     }
-    // turn();
-    // console.log(turn());
-
-    //attackRadius = tempObject.data().attackRadius
-
-  } else {
-
-      checkAttack();
-
-  }
-
+  } //attack logic starts here....
 });
-
-var checkAttack = function() {
-  if(targetObject&&tempObject){
-    if(tempObject.data().alignment!=targetObject.data().alignment){
-      console.log("Attack!");
-      $('body').append(tempMove[0]);
-      tempMove = [];
-       selected = false;
-    }
-  }
-};
-
-$('.space').on('click', function(){
-  targetObject = $(this);
-  console.log(this.id + ' has been clicked');
-});
-
-var checkOccupiedSpaces = function() {
-  $('.space').each( function() {
-    if ($(this).children().length >= 1) {
-      occupiedSpace.push(this);
-    }
-  });
-  for(i = 0;i < occupiedSpace.length; i++) {
-    console.log($(tempObject).data().alignment);
-    var myPlayer = $(tempObject).data().alignment;
-    console.log('My player is', myPlayer);
-    var enemyPlayer = $(occupiedSpace[i]).data().alignment;
-    console.log('Enemy player is', theirPlayer);
-    if (myPlayer === theirPlayer) {
-      console.log('Friendly space!');
-    } else {
-      console.log('Enemy space!');
-    }
-  }
-};
-
-$(tempObject).removeData();
-
-
-
-//Attack
-//if successful move, run a check within character's attack radius
-//for objects not within the object of the character that is moving
-
-//upon successful move, loop through .space
-
-
-// $( '.space' ).filter( function( index ) {
-//   occupiedSpace.push( index ).length <= 1;
-// });
-
-// var charLoc = function(obj, coordX, coordY) {
-//       obj.locx = coordX;
-//       obj.locy = coordY;
-
-// };
-//if a space has a child element, push into array of 'occupiedSpace'
-//then using the getDist function get the distance between the current space
-//and every occupied space
-//if a space that is occupied that is within the attack radius
-//push to new array called attackable
-//loop through attackable array
-//then if child element is opponent player
-
-//then utilze attackDamage math
-//then 1 attack takes place then don't look for another option to attack
-//
-
 
 
