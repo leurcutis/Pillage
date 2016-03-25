@@ -1,6 +1,8 @@
 #PILLAGE!
 
-Welcome to the world of **PILLAGE!**  
+Welcome to the world of **PILLAGE!** 
+
+[Check it out here!](http://leurcutis.github.io/Pillage/)
 
 Pillage is a two player arena combat game, set on a circular board made 
 of hexagons.

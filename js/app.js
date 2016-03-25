@@ -1,7 +1,7 @@
 
-// player one and player two objects below
-// both have 'characters' arrays that are populated with characters when game starts
-// when attacks take place
+// playerOne and playerTwo objects below
+// 'characters' arrays in each contain all three character classes
+// Each character class has it own attributes
 
  var playerOne = {
    name : 'Player One',
@@ -51,7 +51,8 @@
         attackRadius : 3,
         attackDamage : 1,
         hitPoints : 7,
-        objectId : '0p2'
+        objectId : '0p2',
+        alignment : 'playerTwo'
       },
       pTwoAssassin = {
         name : 'Player Two Assassin',
@@ -60,7 +61,8 @@
         attackRadius : 1,
         attackDamage : 1,
         hitPoints : 5,
-        objectId : '1p2'
+        objectId : '1p2',
+        alignment : 'playerTwo'
       },
       pTwoJuggernaut = {
         name : 'Player Two Juggernaut',
@@ -69,17 +71,14 @@
         attackRadius : 1,
         attackDamage : 2,
         hitPoints : 9,
-        objectId : '2p2'
+        objectId : '2p2',
+        alignment : 'playerTwo'
       }
     ]
  };
 
 
-
-
-
- //reaching into each player object and defining the character's
- // images to use as variables
+ //Reaches into each player object and defines the character's images to use as variables to be shown on the board
 
  var p1Wizard = playerOne.characters[0].img;
  var p1Assassin = playerOne.characters[1].img;
@@ -89,68 +88,58 @@
  var p2Assassin = playerTwo.characters[1].img;
  var p2Juggernaut = playerTwo.characters[2].img;
 
- // var allCharacters =
 
- //hard coded the starting places of each of the characters
- //It also initializes the game
+//Resets the game, clears the board (reloads the page)
 
-function initializeGame(){
+$('.resetGameButton').on('click', function() {
+  console.log('reset button clicked');
+  location.reload();
+
+});
+
+
+//Puts both the character image and the character object on the board in specific locations
+//Clicking the 'Pillage!' button (startGameButton) shows the characters
+
+$('.startGameButton').on('click', function() {
 
   $('#Row2-Column0').append(p1Wizard);
   $('#Row2-Column0').data(playerOne.characters[0]);
 
+  $('#Row4-Column0').append(p1Assassin);
+  $('#Row4-Column0').data(playerOne.characters[1]);
+
   $('#Row3-Column1').append(p1Juggernaut);
   $('#Row3-Column1').data(playerOne.characters[2]);
 
-  $('#Row4-Column0').append(p1Assassin);
-  $('#Row4-Column0').data(playerOne.characters[1]);
 
   $('#Row2-Column12').append(p2Wizard);
   $('#Row2-Column12').data(playerTwo.characters[0]);
 
+  $('#Row4-Column12').append(p2Assassin);
+  $('#Row4-Column12').data(playerTwo.characters[1]);
+
   $('#Row3-Column11').append(p2Juggernaut);
   $('#Row3-Column11').data(playerTwo.characters[2]);
 
-  $('#Row4-Column12').append(p2Assassin);
-  $('#Row4-Column12').data(playerTwo.characters[1]);
-}
-initializeGame();
 
-//This logs the clicks on the td's in the console and gives
-//the coordinates
+// startGameButton is hidden when clicked
 
-$('td').on('click', function(){
-  console.log(this.id + ' has been clicked');
+  $('.startGameButton').hide();
+
 });
 
-//the begining move logic below
 
-// click on character i want to move,
-// which selects the character
-// then click on the space
-// I want the character to move too
+// The begining move logic below
 
-// original space removes the character image
-// from the space moved away from
-// and adds it to the new space
-
-// when I click on any space
-// if that space has children = 1
-// then log 'boom'
-
-// record the thing we clicked (which piece) <- push it into an array
-// the next thing we click must be an open space
-// if it's open, append the thing we clicked before (which we get from the array), to what we just clicked.
-
-
-var distance = [];
-var tempMove = [];
-// gets the coordinates of specific .space click
-var currentCoord = [];
-var destCoord = [];
-var tempObject;
-
+var tempMove = [];      // for temporarily storing what is being moved after initialize move conditions are met
+var currentCoord = [];  // for storing the coordinates for the initial space where the character is selected and moved out of
+var destCoord = [];     // for storing the coordinates for the target space the character is moving into
+var tempObject;         // refers to the object that is currently occupying the space clicked
 var selected = false;
+
+
+// Parses the space ID (string) for integers, which are then passed into the getDist function below as coordinates
 
 var getCoord = function(str) {
   var tempRow = parseInt(str[3]);
@@ -158,139 +147,121 @@ var getCoord = function(str) {
   return [tempRow, tempCol];
 };
 
-  var getDist = function(coord1, coord2) {
+// Takes the integer coordintes (from both initial and target spaces) from the getCoord function above and determines the distance of the radius of a click with math
+
+var getDist = function(coord1, coord2) {
   return Math.floor(Math.sqrt(Math.pow(coord1[0] - coord2[0], 2) + Math.pow(coord1[1] - coord2[1], 2)));
 };
-  var moveRadius;
+
+var turnCounter = 0
+
+var moveRadius;
+var attackRadius;
+var hitPoints;
+var attackDamage;
+var alignment;
+
+var occupiedSpace = [];
+var attackableSpace = [];
+
+var turn = function() {
+  turnCounter++;
+  return turnCounter;
+};
+
+
+
+//when a space on the board is selected...
 
 $('.space').click(function(){
 
-  if($(this).children().length === 1 && !selected)  {
-    selected = true;
-    tempMove.push($(this).children());
-    currentCoord = getCoord($(this).attr('id'));
-    tempObject = $(this);
-    moveRadius = tempObject.data().moveRadius;
+  if($(this).children().length === 1 && !selected)  { //...check clicked space to see if it is empty && if it is not 'selected'
+    selected = true;                                  //...if not selected, select it
+    tempMove.push($(this).children());                //...put what is in space into tempMove array (above)
+
+    currentCoord = getCoord($(this).attr('id'));      //...assign 'currentCoord' array (above) to the output of 'getCoord' function (above)
+    tempObject = $(this);                             //...assign the space to 'tempObject' variable
+    moveRadius = tempObject.data().moveRadius;        //...assign the variable 'moveRadius' (above) to the 'moveRadius' value of the object currently in that space
   }
 
-  if($(this).children().length === 0) { // reach into the clicked td and look for an object $(this).children()
-    destCoord = getCoord($(this).attr('id'));
-    var tempDist = getDist(currentCoord, destCoord);
-    if (moveRadius >= tempDist) {
-    distance.push(tempDist);
-    selected = false;
-    $(this).append(tempMove[0]);
-    $(this).data(tempObject.data());
-    $(tempObject).removeData();
-    //$(this).data()
-    tempMove = [];
+  if($(this).children().length === 0) {               //...check target click space to see if it is empty
+    destCoord = getCoord($(this).attr('id'));         //...assign 'destCoord' array (above) to the output of 'getCoord' function (above)
+    var tempDist = getDist(currentCoord, destCoord);  //...create local variable 'tempDist' and assign it to output of the 'getDist' function output
+
+    if (moveRadius >= tempDist) {                     //...
+      selected = false;                               //...
+      $(this).append(tempMove[0]);                    //...
+      $(this).data(tempObject.data());                //...
+
+                                                      //.
+      tempMove = [];
     } else {
-        alert("That's too far to move, DUMMY!");
+        alert("This character can't move that far!");
+        return false;
     }
+    turn();
+    console.log(turn());
+
+    //attackRadius = tempObject.data().attackRadius
+
   }
 });
 
+$('.space').on('click', function(){
+  console.log(this.id + ' has been clicked');
+});
 
-//when clicking square with a character in it, determine what player it is
-//then determine what character it is
+var checkOccupiedSpaces = function() {
+  $('.space').each( function() {
+    if ($(this).children().length >= 1) {
+      occupiedSpace.push(this);
+    }
+  });
+  for(i = 0;i < occupiedSpace.length; i++) {
+    console.log($(tempObject).data().alignment);
+    var myPlayer = $(tempObject).data().alignment;
+    console.log('my player is', myPlayer);
+    var theirPlayer = $(occupiedSpace[i]).data().alignment;
+    console.log('their player is', theirPlayer);
+    if (myPlayer === theirPlayer) {
+      console.log('Friendly space!');
+    } else {
+      console.log('Opponent space!');
+    }
+  }
+};
+
+$(tempObject).removeData();
 
 
 
+//Attack
+//if successful move, run a check within character's attack radius
+//for objects not within the object of the character that is moving
+
+//upon successful move, loop through .space
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// $('.space').click(function(){
-
-//   if($(this).children().length === 0) {
-//     destCoord = getCoord($(this).attr('id'));
-//     var tempDist = getDist(currentCoord, destCoord);
-//     console.log(tempDist);
-//     $(this).append(move[0]);
-//     move = [];
-//   }
+// $( '.space' ).filter( function( index ) {
+//   occupiedSpace.push( index ).length <= 1;
 // });
 
-
-
-// var origSpace = null
-// $('characters').on('click', function()) {
-//   if (origSpace) === null && (".space" !== ''); {
-//         origSpace = (this);
-//   } else (this).appendTo('.space');
-//   origSpace.removeClass;
-//   (this).addClass;
-
-
-// var playerMove = function() {
-
-// }
-
-
-
-// // Character constructor below
-
-// var Character = function(moveRate, attackProximity, attackDamage, hitPoints ) {
-//   this.characterMoveRate = moveRate;
-//   this.characterAttackProximity = attackProximity;
-//   this.characterAttackDamage = attackDamage;
-//   this.characterHitPoints = hitPoints;
-// };
-
-//  Characters generated by above Character constructor
-//  after each one is generated, they are pushed into the playerOne and playerTwo object arrays
-//  when a character is killed by 'hitPoints < 1' then they are removed from the array
-//  when an array is emptied during play, then game is over
-//  player with an array that still contains character objects wins the game
-
-// var pOneAssassin = new Character(3, 1, 1, 5);
-// playerOne.characters.push(pOneAssassin);
-
-// var pOneJuggernaut = new Character(1, 1, 2, 9);
-// playerOne.characters.push(pOneJuggernaut);
-
-// var pOneWizard = new Character(2, 3, 1, 7);
-// playerOne.characters.push(pOneWizard);
-
-
-
-// var move = function(character) {
-
-// character moves
-// check for attack opportunity within threshold
-// if yes, then call attack function here
+// var charLoc = function(obj, coordX, coordY) {
+//       obj.locx = coordX;
+//       obj.locy = coordY;
 
 // };
+//if a space has a child element, push into array of 'occupiedSpace'
+//then using the getDist function get the distance between the current space
+//and every occupied space
+//if a space that is occupied that is within the attack radius
+//push to new array called attackable
+//loop through attackable array
+//then if child element is opponent player
 
-
-// var attack = function {
-//    if opponent is in range
-//      then attack
+//then utilze attackDamage math
+//then 1 attack takes place then don't look for another option to attack
 //
-// }
-//  Player prototypes
-
-//  Character.prototype.player
 
 
-//  Move logic
-
-
-//  Attack logic
 
