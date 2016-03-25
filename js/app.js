@@ -170,6 +170,9 @@ var alignment;
 var occupiedSpace = [];
 var attackableSpace = [];
 
+var p1score=0;
+var p2score=0;
+
 
 //Separates the enemy players
 var checkOccupiedSpaces = function() {
@@ -197,9 +200,11 @@ var checkOccupiedSpaces = function() {
 };
 
 
-//when a space on the board is selected...
+$('.space').click(function(){
 
-$('.space').click(function() {
+  console.log(tempObject);
+  console.log(targetObject);
+
 
   if($(this).children().length === 1 && !selected)  { //...check clicked space to see if it is empty && if it is not 'selected'
     selected = true;                                  //...if not selected, select it
@@ -207,27 +212,115 @@ $('.space').click(function() {
 
     currentCoord = getCoord($(this).attr('id'));      //...assign 'currentCoord' array (above) to the output of 'getCoord' function (above)
     tempObject = $(this);                             //...assign the space to 'tempObject' variable
-    moveRadius = tempObject.data().moveRadius;        //...assign the variable 'moveRadius' (above) to the 'moveRadius' value of the object currently in that space
+    moveRadius = tempObject.data().moveRadius;
+    attackRadius = tempObject.data().attackRadius;
+            //...assign the variable 'moveRadius' (above) to the 'moveRadius' value of the object currently in that space
+  }else if($(this).children().length === 0 && !selected){
+    console.log("you haven't selected anything yet!");
   }
+  else{
+    targetObject = $(this);
 
-  if($(this).children().length === 0) {               //...check target click space to see if it is empty
-    destCoord = getCoord($(this).attr('id'));         //...assign 'destCoord' array (above) to the output of 'getCoord' function (above)
-    var tempDist = getDist(currentCoord, destCoord);  //...create local variable 'tempDist' and assign it to output of the 'getDist' function output
+    if($(this).children().length === 0) {               //...check target click space to see if it is empty
+      destCoord = getCoord($(this).attr('id'));         //...assign 'destCoord' array (above) to the output of 'getCoord' function (above)
+      var tempDist = getDist(currentCoord, destCoord);  //...create local variable 'tempDist' and assign it to output of the 'getDist' function output
 
-    if (moveRadius >= tempDist) {                     //...
-      selected = false;                               //...
-      $(this).append(tempMove[0]);                    //...
-      $(this).data(tempObject.data());                //...
-      $(tempObject).removeData();
+      if (moveRadius >= tempDist) {                     //...
+        selected = false;                               //...
+        $(this).append(tempMove[0]);
+        $(this).data(tempObject.data());
+        tempObject.removeData();
 
-      tempMove = [];
+        tempMove = [];
+
+      } else {
+          alert("This character can't move that far!");
+          return false;
+      }
 
     } else {
-        alert("This character can't move that far!");
-        return false;
+
+      destCoord = getCoord($(this).attr('id'));
+      var tempDist = getDist(currentCoord, destCoord);
+
+      if (attackRadius >= tempDist) {
+        selected = false;
+        if(targetObject&&tempObject){
+          if(tempObject.data().alignment===targetObject.data().alignment){
+            console.log("Friendly fire is not allow!");
+          }
+            else{
+              console.log("Attack!");
+              if(targetObject.data().alignment=="playerOne"){
+                p2score++;
+                if(p2score==3){
+                  alert("Player Blue win!");
+                }
+              } else if(targetObject.data().alignment=="playerTwo"){
+                p1score++;
+                if(p1score==3){
+                  alert("Play Red win!");
+                }
+              }
+              $('body').append($(this).children());
+              targetObject.removeData();
+          }
+        }
+
+      } else {
+          alert("This character can't attack that far!");
+          return false;
+      }
 
     }
-  } //attack logic starts here....
+}
+
 });
+
+
+
+
+
+
+
+//---------------------------------------------------------------------------------
+// later considerations
+
+
+
+//when a space on the board is selected...
+
+// $('.space').click(function() {
+
+//   if($(this).children().length === 1 && !selected)  { //...check clicked space to see if it is empty && if it is not 'selected'
+//     selected = true;                                  //...if not selected, select it
+//     tempMove.push($(this).children());                //...put what is in space into tempMove array (above)
+
+//     currentCoord = getCoord($(this).attr('id'));      //...assign 'currentCoord' array (above) to the output of 'getCoord' function (above)
+//     tempObject = $(this);                             //...assign the space to 'tempObject' variable
+//     moveRadius = tempObject.data().moveRadius;        //...assign the variable 'moveRadius' (above) to the 'moveRadius' value of the object currently in that space
+//   }
+
+//   if($(this).children().length === 0) {               //...check target click space to see if it is empty
+//     destCoord = getCoord($(this).attr('id'));         //...assign 'destCoord' array (above) to the output of 'getCoord' function (above)
+//     var tempDist = getDist(currentCoord, destCoord);  //...create local variable 'tempDist' and assign it to output of the 'getDist' function output
+
+//     if (moveRadius >= tempDist) {                     //...
+//       selected = false;                               //...
+//       $(this).append(tempMove[0]);                    //...
+//       $(this).data(tempObject.data());                //...
+//       $(tempObject).removeData();
+
+//       tempMove = [];
+
+//     } else {
+//         alert("This character can't move that far!");
+//         return false;
+
+//     }
+//   } //attack logic starts here....
+// });
+
+
 
 
