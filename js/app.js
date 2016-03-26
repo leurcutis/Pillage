@@ -3,6 +3,16 @@
 // 'characters' arrays in each contain all three character classes
 // Each character class has it own attributes
 
+ 
+
+// You can definitely use construtors for your play pieces (I'm assuming that there will be more one day?)
+// I didn't want to do it for you now (as I'm feeling lazy), but will possibly do it over the
+// weekend, or work with you when you do.
+
+
+
+
+
  var playerOne = {
    name : 'Player One',
    characters : [
