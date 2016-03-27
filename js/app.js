@@ -41,6 +41,8 @@
     ]
  };
 
+
+
  var playerTwo = {
    name : 'Player_Two',
    characters : [
@@ -77,18 +79,6 @@
     ]
  };
 
-
- //Reaches into each player object and defines the character's images to use as variables to be shown on the board
-
- var p1Wizard = playerOne.characters[0].img;
- var p1Assassin = playerOne.characters[1].img;
- var p1Juggernaut = playerOne.characters[2].img;
-
- var p2Wizard = playerTwo.characters[0].img;
- var p2Assassin = playerTwo.characters[1].img;
- var p2Juggernaut = playerTwo.characters[2].img;
-
-
 //Resets the game, clears the board (reloads the page)
 
 $('.resetGameButton').on('click', function() {
@@ -103,23 +93,23 @@ $('.resetGameButton').on('click', function() {
 
 $('.startGameButton').on('click', function() {
 
-  $('#Row2-Column0').append(p1Wizard);
+  $('#Row2-Column0').append(playerOne.characters[0].img);
   $('#Row2-Column0').data(playerOne.characters[0]);
 
-  $('#Row4-Column0').append(p1Assassin);
+  $('#Row4-Column0').append(playerOne.characters[1].img);
   $('#Row4-Column0').data(playerOne.characters[1]);
 
-  $('#Row3-Column1').append(p1Juggernaut);
+  $('#Row3-Column1').append(playerOne.characters[2].img);
   $('#Row3-Column1').data(playerOne.characters[2]);
 
 
-  $('#Row2-Column12').append(p2Wizard);
+  $('#Row2-Column12').append(playerTwo.characters[0].img);
   $('#Row2-Column12').data(playerTwo.characters[0]);
 
-  $('#Row4-Column12').append(p2Assassin);
+  $('#Row4-Column12').append(playerTwo.characters[1].img);
   $('#Row4-Column12').data(playerTwo.characters[1]);
 
-  $('#Row3-Column11').append(p2Juggernaut);
+  $('#Row3-Column11').append(playerTwo.characters[2].img);
   $('#Row3-Column11').data(playerTwo.characters[2]);
 
 
@@ -136,18 +126,21 @@ $('.space').on('click', function(){
 });
 
 
-// The begining move logic below
+// Arrays for storing data collected from move and attack events
 
-var tempMove = [];      // for temporarily storing what is being moved after initialize move conditions are met
-var currentCoord = [];  // for storing the coordinates for the initial space where the character is selected and moved out of
-var destCoord = [];     // for storing the coordinates for the target space the character is moving into
-var tempObject;         // refers to the object that is currently occupying the space clicked
+var tempMove = [];
+var currentCoord = [];
+var destCoord = [];
+
+// Variables of 'selected player' and 'target enemy' to be used in move and attack events
+var tempObject;
 var targetObject;
+
+
 var selected = false;
 
 
 // Parses the space ID (string) for integers, which are then passed into the getDist function below as coordinates
-
 var getCoord = function(str) {
   var tempRow = parseInt(str[3]);
   var tempCol = parseInt(str[11] + str[12]);
@@ -155,26 +148,25 @@ var getCoord = function(str) {
 };
 
 // Takes the integer coordintes (from both initial and target spaces) from the getCoord function above and determines the distance of the radius of a click with math
-
 var getDist = function(coord1, coord2) {
   return Math.floor(Math.sqrt(Math.pow(coord1[0] - coord2[0], 2) + Math.pow(coord1[1] - coord2[1], 2)));
 };
 
-//character variables
+// Character variables
 var moveRadius;
 var attackRadius;
 var hitPoints;
 var attackDamage;
 var alignment;
 
+
 var occupiedSpace = [];
-var attackableSpace = [];
 
 var p1score=0;
 var p2score=0;
 
 
-//Separates the enemy players
+//Separates the enemy players:
 var checkOccupiedSpaces = function() {
   $('.space').each( function() {
     if ($(this).children().length >= 1) {
@@ -199,127 +191,89 @@ var checkOccupiedSpaces = function() {
   }
 };
 
-
-$('.space').click(function(){
+// This is where both move and attack events start:
+$('.space').click(function() {
 
   console.log(tempObject);
   console.log(targetObject);
 
+// Both move and attack events start by validating that the td ".space" clicked on has a character in it.
+  if($(this).children().length === 1 && !selected) {
+    selected = true;
 
-  if($(this).children().length === 1 && !selected)  { //...check clicked space to see if it is empty && if it is not 'selected'
-    selected = true;                                  //...if not selected, select it
-    tempMove.push($(this).children());                //...put what is in space into tempMove array (above)
+// I save the object validated into the 'tempMove' array so that I can refer to it later.
+    tempMove.push($(this).children());
 
-    currentCoord = getCoord($(this).attr('id'));      //...assign 'currentCoord' array (above) to the output of 'getCoord' function (above)
-    tempObject = $(this);                             //...assign the space to 'tempObject' variable
+// Once the above is validated, I retrieve the coordinates of the space using the 'getCoord' function
+    currentCoord = getCoord($(this).attr('id'));
+    tempObject = $(this);
     moveRadius = tempObject.data().moveRadius;
     attackRadius = tempObject.data().attackRadius;
-            //...assign the variable 'moveRadius' (above) to the 'moveRadius' value of the object currently in that space
-  }else if($(this).children().length === 0 && !selected){
+
+
+  } else if($(this).children().length === 0 && !selected) {
     console.log("you haven't selected anything yet!");
-  }
-  else{
-    targetObject = $(this);
+  } else {
+      targetObject = $(this);
 
-    if($(this).children().length === 0) {               //...check target click space to see if it is empty
-      destCoord = getCoord($(this).attr('id'));         //...assign 'destCoord' array (above) to the output of 'getCoord' function (above)
-      var tempDist = getDist(currentCoord, destCoord);  //...create local variable 'tempDist' and assign it to output of the 'getDist' function output
+      if($(this).children().length === 0) {
+        destCoord = getCoord($(this).attr('id'));
+        var tempDist = getDist(currentCoord, destCoord);
 
-      if (moveRadius >= tempDist) {                     //...
-        selected = false;                               //...
-        $(this).append(tempMove[0]);
-        $(this).data(tempObject.data());
-        tempObject.removeData();
+        if(moveRadius >= tempDist) {
+          selected = false;
+          $(this).append(tempMove[0]);
+          $(this).data(tempObject.data());
+          tempObject.removeData();
 
-        tempMove = [];
+          tempMove = [];
 
+        } else {
+            alert("This character can't move that far!");
+            return false;
+        }
       } else {
-          alert("This character can't move that far!");
-          return false;
-      }
+          destCoord = getCoord($(this).attr('id'));
+          var tempDist = getDist(currentCoord, destCoord);
 
-    } else {
+          if(attackRadius >= tempDist) {
+            selected = false;
 
-      destCoord = getCoord($(this).attr('id'));
-      var tempDist = getDist(currentCoord, destCoord);
+            if(targetObject && tempObject){
 
-      if (attackRadius >= tempDist) {
-        selected = false;
-        if(targetObject&&tempObject){
-          if(tempObject.data().alignment===targetObject.data().alignment){
-            console.log("Friendly fire is not allow!");
-          }
-            else{
-              console.log("Attack!");
-              if(targetObject.data().alignment=="playerOne"){
-                p2score++;
-                if(p2score==3){
-                  alert("Player Blue win!");
-                }
-              } else if(targetObject.data().alignment=="playerTwo"){
-                p1score++;
-                if(p1score==3){
-                  alert("Play Red win!");
-                }
+              if(tempObject.data().alignment === targetObject.data().alignment){
+                console.log('Friendly fire!');
+
+              } else {
+                  console.log('Attack!');
+
+                  if(targetObject.data().alignment === 'playerOne'){
+                    p2score++;
+
+                    if(p2score === 3){
+                      alert('Player One wins!');
+                    }
+
+                  } else if(targetObject.data().alignment === 'playerTwo'){
+                    p1score++;
+
+                    if(p1score === 3){
+                      alert('Player Two wins!');
+                    }
+                  }
+                  $('body').append($(this).children());
+                  targetObject.removeData();
               }
-              $('body').append($(this).children());
-              targetObject.removeData();
+
+            }
+
+          } else {
+              alert('Too far to move!');
+              return false;
           }
         }
-
-      } else {
-          alert("This character can't attack that far!");
-          return false;
       }
-
-    }
-}
-
-});
-
-
-
-
-
-
-
-//---------------------------------------------------------------------------------
-// later considerations
-
-
-
-//when a space on the board is selected...
-
-// $('.space').click(function() {
-
-//   if($(this).children().length === 1 && !selected)  { //...check clicked space to see if it is empty && if it is not 'selected'
-//     selected = true;                                  //...if not selected, select it
-//     tempMove.push($(this).children());                //...put what is in space into tempMove array (above)
-
-//     currentCoord = getCoord($(this).attr('id'));      //...assign 'currentCoord' array (above) to the output of 'getCoord' function (above)
-//     tempObject = $(this);                             //...assign the space to 'tempObject' variable
-//     moveRadius = tempObject.data().moveRadius;        //...assign the variable 'moveRadius' (above) to the 'moveRadius' value of the object currently in that space
-//   }
-
-//   if($(this).children().length === 0) {               //...check target click space to see if it is empty
-//     destCoord = getCoord($(this).attr('id'));         //...assign 'destCoord' array (above) to the output of 'getCoord' function (above)
-//     var tempDist = getDist(currentCoord, destCoord);  //...create local variable 'tempDist' and assign it to output of the 'getDist' function output
-
-//     if (moveRadius >= tempDist) {                     //...
-//       selected = false;                               //...
-//       $(this).append(tempMove[0]);                    //...
-//       $(this).data(tempObject.data());                //...
-//       $(tempObject).removeData();
-
-//       tempMove = [];
-
-//     } else {
-//         alert("This character can't move that far!");
-//         return false;
-
-//     }
-//   } //attack logic starts here....
-// });
+    });
 
 
 
